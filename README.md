@@ -2,7 +2,9 @@ A web animation for climate change deniers based on web animations at https://gi
 
 For a demonstration, see http://climate.tidalforce.org
 
-For a presentation, see http://bit.ly/climate-deniers
+For a presentation, see http://bit.ly/space-for-climate
+
+For a climate deniers raw data, see http://bit.ly/climate-deniers
 
 To up to date on civic data, property tax reform, community involvement see http://fedex1.tidalforce.org
 
