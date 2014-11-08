@@ -1,0 +1,424 @@
+
+<!--
+/*
+ * Copyright 2013 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+-->
+
+<!DOCTYPE html>
+<title>Climate Watch</title>
+<meta name="viewport" content="width=device-width, height=device-height, user-scalable=false;">
+<style>
+  body {
+    font: 10pt arial;
+    background-color: black;
+    overflow: hidden;
+  }
+
+  .starfield {
+    background-color: rgba(0,0,0,0);
+  }
+
+  .star0 {
+    height: 1px;
+    width: 1px;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star1 {
+    height: 2px;
+    width: 2px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star2 {
+    height: 3px;
+    width: 3px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star3 {
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+
+  .star4 {
+    height: 4px;
+    width: 4px;
+    border-radius: 50%;
+    opacity: 1;
+    position: absolute;
+  }
+#mygraph {
+  position: absolute;
+  z-index: -1;
+  background-color: black;
+  left: 10px;
+  top: 300px;
+  width: 100%;
+}
+#el {
+  position: absolute;
+  background-color: LightSteelBlue;
+  left: 10px;
+  top: 300px;
+}
+.car {
+  /*content: "climate deniers"; */
+  position: absolute;
+  background-color: LightSteelBlue;
+  left: 10px;
+}
+
+.light {
+  left: 5px;
+  width: 25px;
+  height: 25px;
+  position: absolute;
+  border-radius: 100%;
+}
+
+.block {
+  position: absolute;
+  background-color: lightsteelblue;
+}
+
+.wheel {
+  position: absolute;
+  border-radius: 100%;
+  top:225px;
+  height: 50px;
+  width: 50px;
+  background-color: black;
+}
+
+.button {
+  position: absolute;
+  top: 40px;
+  left: 10px;
+  height: 2em;
+  width: 6em;
+  text-align: center;
+  font-size: 30px;
+}
+
+.button:hover {
+  background-color: green;
+}
+
+#redLight {
+  top: 5px;
+  background-color: red;
+}
+
+#orangeLight {
+  top: 35px;
+  background-color: rgb(50,50,50);
+}
+
+#greenLight {
+  top: 65px;
+  background-color: rgb(50,50,50);
+}
+
+#trafficLight {
+  position: absolute;
+  top: 10px;
+  left: 495px;
+  width: 35px;
+  height: 95px;
+  background-color: rgb(192,192,192);
+}
+
+#carA {
+  top: 100px;
+  left: 10px;
+  width: 300px;
+  height: 150px;
+  text-align: center;
+  font-size: 30px;
+}
+
+#carB {
+  top: 175px;
+  left: 315px;
+  width: 100px;
+  height: 75px;
+}
+
+#carC {
+  top: 125px;
+  left: 315px;
+  width: 75px;
+  height: 50px;
+}
+
+#wheelA {
+  left: 25px;
+}
+
+#wheelB {
+  left: 195px;
+}
+
+</style>
+<audio controls>
+    <source src="../static/229168_SOUNDDOGS__ti.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+</audio>
+
+ <div id="mygraph"></div>
+
+<div id="trafficLight">
+  <div id="redLight" class="light"></div>
+  <div id="orangeLight" class="light"></div>
+  <div id="greenLight" class="light"></div>
+</div>
+<div class="car">
+<!-- <img src="https://secure.assets.bostatic.com/apps/lincoln/media/person_photos/400440.jpg"> -->
+  <span id="el"><img src="../static/ajax-loader.gif">Loading...</span>
+  <div id="carA" class="block">Climate Deniers</div>
+  <div id="carB" class="block"></div>
+  <div id="carC" class="block"></div>
+  <div id="wheelA" class="wheel"></div>
+  <div id="wheelB" class="wheel"></div>
+</div>
+<button id="buttonA" class="button">Recall!</button>
+
+<script src="../platform/platform.js"></script>
+<script src="../static/web-animations.js"></script>
+<link rel="import" href="../core-ajax/core-ajax.html">
+<script type="text/javascript" src="http://www.google.com/jsapi"></script>
+<script type="text/javascript" src="../static/graph3d.js"></script>
+
+ <script type="text/javascript">
+      var data = null;
+      var graph = null;
+
+      google.load("visualization", "1");
+
+      // Set callback to run when API is loaded
+      google.setOnLoadCallback(drawVisualization);
+
+      function custom(x, y) {
+        return Math.sin(x/50) * Math.cos(y/50) * 50 + 50;
+      }
+
+      // Called when the Visualization API is loaded.
+      function drawVisualization() {
+      /*
+        // Create and populate a data table.
+        data = new google.visualization.DataTable();
+        data.addColumn('number', 'x');
+        data.addColumn('number', 'y');
+        //data.addColumn('number', 'z');
+        data.addColumn('number', 'value');
+
+        // create some nice looking data with sin/cos
+        var steps = 25;  // number of datapoints will be steps*steps
+        var axisMax = 314;
+        axisStep = axisMax / steps;
+        for (var x = 0; x < axisMax; x+=axisStep) {
+          for (var y = 0; y < axisMax; y+=axisStep) {
+            var value = custom(x,y);
+            data.addRow([x, y, value]);
+          }
+        }
+
+        // specify options
+        options = {//width:  "100%",
+                   height: "400px",
+                   //style: "dot-color",
+                   style: "surface",
+                   showPerspective: true,
+                   showGrid: true,
+                   showShadow: false,
+                   keepAspectRatio: true,
+                   verticalRatio: 0.5
+                   };
+
+        // Instantiate our graph object.
+        graph = new links.Graph3d(document.getElementById('mygraph'));
+
+        // Draw our graph with the created data and options
+        graph.draw(data, options);
+        */
+      }
+   </script>
+
+<script>
+  var lightOff = "rgb(50,50,50)";
+
+  var sgroup = new AnimationSequence([]);
+
+  var go = new AnimationGroup([], {}, sgroup);
+  new Animation(document.querySelector("#redLight"), {"background-color": lightOff}, {duration: 0.5}, go);
+  new Animation(document.querySelector("#greenLight"), {"background-color": "green"}, {duration: 0.5}, go);
+
+  //new Animation(document.querySelector(".car"), {left: "2000px"}, {top: "0px"}, {duration: 5, timingFunction: "ease-in"}, sgroup);
+  //new Animation(document.querySelector(".car"), [{left: "1900px"},{left: "2000px"}], {duration: 5, timingFunction: "ease-in"}, sgroup);
+  new Animation(document.querySelector(".car"), {left: "2000px"}, {duration: 5, timingFunction: "ease-in"}, sgroup);
+  new Animation(document.querySelector(".car"), [{left: "10px"}, {left: "2000px"}], {duration: 5, timingFunction: "ease-in"}, sgroup);
+  //new Animation(document.querySelector(".car"), {left: "2000px"}, {opacity: "0.5", transform: "scale(0.5)"}, 
+        //{opacity: "1.0", transform: "scale(1)"}, {duration: 5, timingFunction: "ease-in"}, sgroup);
+  //new Animation(document.querySelector("#el"), {left: "2000px"}, {duration: 5, timingFunction: "ease-in"}, sgroup);
+
+  var maybe = new AnimationGroup([], {startDelay: 0.25}, sgroup);
+  new Animation(document.querySelector("#greenLight"), {"background-color": lightOff}, {duration: 0.5}, maybe);
+  new Animation(document.querySelector("#orangeLight"), {"background-color": "rgb(255,165,0)"}, {duration: 0.5}, maybe);
+
+  var stop = new AnimationGroup([], {startDelay: 0.25}, sgroup);
+  new Animation(document.querySelector("#orangeLight"), {"background-color": lightOff}, {duration: 0.5}, stop);
+  new Animation(document.querySelector("#redLight"), {"background-color": "red"}, {duration: 0.5}, stop);
+
+  new Animation(document.querySelector(".car"), {left: ["-500px", "10px"]}, {duration: 2, timingFunction: "ease-out"}, sgroup);
+  //new Animation(document.querySelector("#el"), {left: ["-500px", "10px"]}, {duration: 2, timingFunction: "ease-out"}, sgroup);
+var counter=0;
+  document.querySelector("#buttonA").addEventListener('mousedown', function() {
+    document.querySelector('#rep' + counter).style.display="none"
+    counter+=1
+    //document.querySelector('#carB').innerHTML= ( this.response[item].firstname + ' ' + this.response[item].lastname + ' party: ' + this.response[item].party)
+    //document.querySelector('#carB').innerHTML= 'xxx'
+    var player = document.timeline.play(sgroup);
+    //console.log(document.querySelector('#rep' + counter))
+    //console.log(player)
+    //player.finished.then(function() { console.log(player.playState); })
+  }, false);
+</script>
+<!-- <core-ajax url="//localhost:8000/static/climate-deniers.json" -->
+<!-- <core-ajax auto url="http://gdata.youtube.com/feeds/api/videos/" -->
+<!-- <core-ajax url="http://localhost:8000/static/climate-deniers.json" -->
+
+<core-ajax auto id="id1core-ajax"  url="../static/stars-speck-simple.json" 
+               handleAs="json"></core-ajax>
+    <script>
+      // Wait for 'polymer-ready'. Ensures the element is upgraded.
+      window.addEventListener('polymer-ready', function(e) {
+        var ajax = document.querySelector('core-ajax');
+        //var ajax = document.querySelector('.core-ajax');
+
+        // Respond to events it fires.
+        ajax.addEventListener('core-error', function(e) {
+        console.log("core-error: " + e)
+        })
+        ajax.addEventListener('core-complete', function(e) {
+        //console.log("core-complete: " + e)
+        })
+
+        ajax.addEventListener('core-response', function(e) {
+        //console.log(e)
+        //console.log(e.path.nodelist[0])
+        //console.log(e.path[0].id)
+        //console.log(e.srcElement.activeRequest.responseURL)
+        if(e.srcElement.activeRequest.responseURL.indexOf('stars-speck-simple.json') != -1){
+          document.querySelector('#id1core-ajax').url = '../static/climate-deniers.json'
+            // Create and populate a data table.
+            data = new google.visualization.DataTable();
+            data.addColumn('number', 'x');
+            data.addColumn('number', 'y');
+            data.addColumn('number', 'z');
+            data.addColumn('number', 'value');
+
+              for (item in this.response){
+                //console.log(this.response[item])
+                var val=this.response[item]
+                //data.addRow([parseFloat(val.x), parseFloat(val.y), parseFloat(val.z), parseFloat(val.value)]);
+                data.addRow([parseInt(val.x), parseInt(val.y), parseInt(val.z), parseInt(val.value)]);
+              }
+
+            // specify options
+            options = {width:  "1400px",
+                       height: "400px",
+                       backgroundColor: "black",
+                       //style: "dot-color",
+                       style: "dot-size",
+                       showPerspective: true,
+                       showGrid: true,
+                       showShadow: false,
+                       keepAspectRatio: true,
+                       verticalRatio: 0.5
+                       };
+
+            // Instantiate our graph object.
+            graph = new links.Graph3d(document.getElementById('mygraph'));
+
+            // Draw our graph with the created data and options
+            graph.draw(data, options);
+        }
+        if(e.srcElement.activeRequest.responseURL.indexOf('climate-deniers.json') != -1){
+          document.querySelector('#el').innerHTML = ''
+          for (item in this.response){
+          //console.log( this.response[item] )
+          //document.querySelector('#carB').innerHTML= ( this.response[item].firstname + ' ' + this.response[item].lastname + ' party: ' + this.response[item].party)
+          document.querySelector('#el').innerHTML += '<div style="display: block" id="rep' + item + '"><img width="200" src="' + this.response[item].photourl + '">'
+                    + ( this.response[item].firstname + ' ' + this.response[item].lastname + ' party: ' + this.response[item].party)
+                    + '<blockquote>' + this.response[item].denierstatement 
+                    + '</blockquote>'
+                    + 'source: <a href="'+this.response[item].denierquoteurl + '">link</a></div><hr/>'
+          document.querySelector('#carB').innerHTML = ''
+          document.querySelector('#layer0').innerHTML += '<img width="20" src="' + this.response[item].photourl + '">'
+          }
+          }
+        });
+        ajax.go(); // Call its API methods.
+      });
+</script>
+
+
+<div id="universe"></div>
+<script>
+  var layerCount = 5;
+  var starCount = 100;
+  var universe = document.getElementById('universe');
+  var w = window;
+  var d = document;
+  var e = d.documentElement;
+  var g = d.getElementsByTagName('body')[0];
+  var width = w.innerWidth || e.clientWidth || g.clientWidth;
+  var height = w.innerHeight|| e.clientHeight|| g.clientHeight;
+  var layers = [];
+  var layerGroup = [];
+  for (var l = 0; l < layerCount; ++l) {
+    var layer = document.createElement('div');
+    layer.setAttribute('id', 'layer' + l);
+    layer.setAttribute('class', 'starfield');
+    universe.appendChild(layer);
+    layers.push(layer);
+    for (var i = 0; i < starCount; ++i) {
+      var xpos = Math.round(Math.random() * width);
+      var ypos = Math.round(Math.random() * height);
+      for (var s = 0; s < 2; ++s) {
+        var star = document.createElement('div');
+        star.setAttribute('class', 'star' + l);
+        star.style.webkitTransform = 'translate(' + (xpos + s * width) + 'px, ' + ypos + 'px)';
+        star.style.transform = 'translate(' + (xpos + s * width) + 'px, ' + ypos + 'px)';
+        star.style.backgroundColor = 'white';//rgb(' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ', ' + Math.round(Math.random() * 255) + ')';
+        layer.appendChild(star);
+      }
+    }
+    layerGroup.push(new Animation(layers[l], [{transform: 'translate3d(0, 0, 0)'}, {transform: 'translate3d(-' + width + 'px, 0, 0)'}], {duration: Math.pow(2, layerCount - l) * 1000, iterations: Math.pow(2, l)}));
+  }
+  var anim = new AnimationGroup(layerGroup, {iterations: Infinity});
+  document.timeline.play(anim);
+
+</script>
