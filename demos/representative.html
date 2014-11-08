@@ -122,6 +122,16 @@
   font-size: 30px;
 }
 
+.buttonright {
+  position: absolute;
+  top: 40px;
+  right: 10px;
+  height: 2em;
+  width: 6em;
+  text-align: center;
+  font-size: 10px;
+}
+
 .button:hover {
   background-color: green;
 }
@@ -203,7 +213,8 @@
   <div id="wheelA" class="wheel"></div>
   <div id="wheelB" class="wheel"></div>
 </div>
-<button id="buttonA" class="button">Recall!</button>
+<button class="buttonA button" class="button">Recall!</button>
+<button class="buttonA buttonright">Recall!</button>
 
 <script src="../platform/platform.js"></script>
 <script src="../static/web-animations.js"></script>
@@ -212,6 +223,7 @@
 <script type="text/javascript" src="../static/graph3d.js"></script>
 
  <script type="text/javascript">
+      var counter=0;
       var data = null;
       var graph = null;
 
@@ -293,17 +305,6 @@
 
   new Animation(document.querySelector(".car"), {left: ["-500px", "10px"]}, {duration: 2, timingFunction: "ease-out"}, sgroup);
   //new Animation(document.querySelector("#el"), {left: ["-500px", "10px"]}, {duration: 2, timingFunction: "ease-out"}, sgroup);
-var counter=0;
-  document.querySelector("#buttonA").addEventListener('mousedown', function() {
-    document.querySelector('#rep' + counter).style.display="none"
-    counter+=1
-    //document.querySelector('#carB').innerHTML= ( this.response[item].firstname + ' ' + this.response[item].lastname + ' party: ' + this.response[item].party)
-    //document.querySelector('#carB').innerHTML= 'xxx'
-    var player = document.timeline.play(sgroup);
-    //console.log(document.querySelector('#rep' + counter))
-    //console.log(player)
-    //player.finished.then(function() { console.log(player.playState); })
-  }, false);
 </script>
 <!-- <core-ajax url="//localhost:8000/static/climate-deniers.json" -->
 <!-- <core-ajax auto url="http://gdata.youtube.com/feeds/api/videos/" -->
@@ -314,6 +315,19 @@ var counter=0;
     <script>
       // Wait for 'polymer-ready'. Ensures the element is upgraded.
       window.addEventListener('polymer-ready', function(e) {
+
+  document.querySelector(".buttonA").addEventListener('mousedown', function(e) {
+    document.querySelector('#rep' + counter).style.display="none"
+    counter+=1
+    if (counter > 100) counter = 0;
+    var player = document.timeline.play(sgroup);
+  }, false);
+  document.querySelector(".buttonA.buttonright").addEventListener('mousedown', function(e) {
+    document.querySelector('#rep' + counter).style.display="none"
+    counter+=1
+    if (counter > 100) counter = 0;
+    var player = document.timeline.play(sgroup);
+  }, false);
         var ajax = document.querySelector('core-ajax');
         //var ajax = document.querySelector('.core-ajax');
 
