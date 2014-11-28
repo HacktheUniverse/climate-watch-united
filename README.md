@@ -9,3 +9,5 @@ For a climate deniers raw data, see http://bit.ly/climate-deniers
 To up to date on civic data, property tax reform, community involvement see http://fedex1.tidalforce.org
 
 Category:  Other (civic project), possibly visualization, possibly education
+
+Demo from Hack the Universe presentations: http://youtu.be/jv2ZybdoIIk?list=UUIuhq9LTleLC-GMdAOvvZcg
